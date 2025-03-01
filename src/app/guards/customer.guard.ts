@@ -23,10 +23,13 @@ export class CustomerGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    if (!this.decodeToken.userRoles$.getValue().includes('CUSTOMER')) {
-      this.router.navigate(['/']);
-      return false;
-    }
+    this.decodeToken.userRoles$.subscribe((role) => {
+      if (!role.includes('CUSTOMER')) {
+        this.router.navigate(['/']);
+        return false;
+      }
+    });
+
     return true;
   }
   canActivateChild(

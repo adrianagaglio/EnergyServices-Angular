@@ -23,9 +23,11 @@ export class UserGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    if (this.decodeToken.userRoles$.getValue().includes('USER')) {
-      return true;
-    }
+    this.decodeToken.userRoles$.subscribe((role) => {
+      if (role.includes('USER')) {
+        return true;
+      }
+    });
 
     this.router.navigate(['/profile']);
     return false;

@@ -19,10 +19,12 @@ export class LoggedGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    if (this.authSvc.userAuthSubject$.getValue() == null) {
-      this.router.navigate(['/auth']);
-      return false;
-    }
+    this.authSvc.userAuthSubject$.subscribe((user) => {
+      if (!user) {
+        this.router.navigate(['/auth']);
+        return false;
+      }
+    });
 
     return true;
   }
