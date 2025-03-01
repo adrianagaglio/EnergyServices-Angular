@@ -1,0 +1,148 @@
+<div class="container">
+  <h2 class="mb-4">📄 Invoices</h2>
+  <div>
+    <h6>Filter by</h6>
+    <div class="d-flex align-content-between justify-content-between">
+      <div class="btn-group align-self-center" role="group">
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="all"
+          autocomplete="off"
+          [(ngModel)]="searchBy"
+          value="all"
+          checked
+          (change)="getAll(0, 'number,desc')"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="all">All</label>
+
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byNumber"
+          [(ngModel)]="searchBy"
+          value="byNumber"
+          autocomplete="off"
+          (change)="openSearchByNumber()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byNumber"
+          >Number</label
+        >
+
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          [(ngModel)]="searchBy"
+          value="byStatus"
+          id="byStatus"
+          autocomplete="off"
+          (change)="openSearchByStatus()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byStatus"
+          >Status</label
+        >
+        <ng-container *ngIf="!roles.includes('CUSTOMER')">
+          <input
+            type="radio"
+            class="btn-check"
+            name="searchBy"
+            id="byCustomerInfo"
+            [(ngModel)]="searchBy"
+            value="byCustomerInfo"
+            autocomplete="off"
+            (change)="openSearchByCustomerInfo()"
+          />
+          <label class="btn btn-outline-primary btn-sm tab" for="byCustomerInfo"
+            >Customer Info</label
+          >
+        </ng-container>
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byDate"
+          [(ngModel)]="searchBy"
+          value="byDate"
+          autocomplete="off"
+          (change)="openSearchByDate()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byDate"
+          >Date</label
+        >
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byYear"
+          [(ngModel)]="searchBy"
+          value="byYear"
+          autocomplete="off"
+          (change)="openSearchByYear()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byYear"
+          >Year</label
+        >
+
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byAmount"
+          [(ngModel)]="searchBy"
+          value="byAmount"
+          autocomplete="off"
+          (change)="openSearchByAmount()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byAmount"
+          >Amount</label
+        >
+      </div>
+      <app-filters
+        *ngIf="searchBy != 'byNumber'"
+        (order)="order($event)"
+        (sort)="sortAsc($event)"
+      ></app-filters>
+    </div>
+  </div>
+
+  <app-alert
+    *ngIf="message && message.length > 0"
+    [message]="message"
+    [type]="'warning'"
+    (closeAlert)="clearMessage()"
+  ></app-alert>
+
+  <ng-container *ngIf="!isLoading">
+    <div *ngIf="invoices" class="row py-3 gy-3">
+      <div *ngIf="isPaged">
+        <div class="d-flex align-items-center">
+          <p class="mb-0">Pages:</p>
+          <span
+            (click)="changePage(num - 1)"
+            class="badge text-primary"
+            *ngFor="let num of pages"
+            role="button"
+            >{{ num }}</span
+          >
+        </div>
+      </div>
+      <div class="col-12" *ngFor="let invoice of invoices">
+        <app-invoice-card [invoice]="invoice"></app-invoice-card>
+      </div>
+    </div>
+
+    <div *ngIf="customerInvoices" class="row py-3 gy-3">
+      <div class="col-12" *ngFor="let invoice of customerInvoices">
+        <app-invoice-card [invoice]="invoice"></app-invoice-card>
+      </div>
+    </div>
+  </ng-container>
+  <div *ngIf="isLoading" class="d-flex justify-content-center">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

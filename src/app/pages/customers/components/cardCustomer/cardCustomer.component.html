@@ -1,0 +1,67 @@
+<ng-container *ngIf="customer">
+  <div class="card shadow border-0">
+    <div class="card-header border-0 d-flex justify-content-between head">
+      <span>ID: <span class="fw-bold">{{ customer.id }}</span></span>
+      <span>Creation Date:<span class="fw-bold"> {{ customer.creationDate }}</span> </span>
+    </div>
+    <div class="card-body">
+
+        <h5>
+          <span class="grey">Company: </span>
+          <span class="fw-bold">{{ customer.denomination }}</span>
+        </h5>
+        <h6>
+          <span class="grey">VatCode: </span> <span class="">{{ customer.vatCode }}</span>
+        </h6>
+
+      <div class="d-flex flex-column">
+        <div class="separator"></div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item border-0">
+            <span class="grey">💼 Type:</span>
+             <span class=""> </span> {{ customer.type }}
+          </li>
+          <li class="list-group-item border-0">
+            <span class="grey">📞 Phone:</span>
+            <span class=""> {{ customer.contactPhone }}</span>
+          </li>
+          <li class="list-group-item border-0">
+            <span class="grey">✉️ PEC: </span><span class=""> {{ customer.pec }}</span>
+          </li>
+          <li class="list-group-item border-0">
+            <span class="grey"> 📍Office :</span>
+            <span class="">
+              {{ customer.addresses.RegisteredOfficeAddress.street }}
+              {{ customer.addresses.RegisteredOfficeAddress.city.name }} (
+              {{
+                customer.addresses.RegisteredOfficeAddress.city.district.code
+              }} )
+
+            </span>
+          </li>
+          <li class="list-group-item border-0">
+           <span class="grey"> 🏢 Headquarter:</span>
+            <span class="">
+              {{ customer.addresses.OperationalHeadquartersAddress.street }}
+              {{ customer.addresses.OperationalHeadquartersAddress.city.name }}
+              {{
+                customer.addresses.OperationalHeadquartersAddress.city.district
+                  .code
+              }}
+
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-footer bg-transparent border-0 mb-2 d-flex justify-content-end">
+      <a class="text-primary no-underline" (click)="seeInvoices()">
+         → See invoices
+      </a>
+    </div>
+  </div>
+</ng-container>
+
+<!-- <li class="list-group-item" *ngIf="customer.yearlyTurnover > 0">
+  Yearly turnover: {{ customer.yearlyTurnover }} €
+</li> -->

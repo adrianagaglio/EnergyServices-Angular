@@ -1,0 +1,39 @@
+<div class="d-flex align-items-center gap-2">
+  <input
+    type="radio"
+    name="sort"
+    [(ngModel)]="currentSort"
+    id="number"
+    value="number"
+    class="btn-check"
+    (click)="emitSort('number')"
+  />
+  <label for="number" class="text-success">Number</label>
+  <input
+    type="radio"
+    name="sort"
+    [(ngModel)]="currentSort"
+    id="date"
+    value="date"
+    class="btn-check"
+    (click)="emitSort('date')"
+  />
+  <label for="date" class="text-success">Date</label>
+  <input
+    type="radio"
+    name="sort"
+    [(ngModel)]="currentSort"
+    id="status"
+    value="status"
+    class="btn-check"
+    (click)="emitSort('status')"
+  />
+  <label for="status" class="text-success">Status</label>
+
+  <button class="btn btn-success" (click)="emitOrder('desc')">
+    <ng-icon name="bootstrapArrowUp"></ng-icon>
+  </button>
+  <button class="btn btn-success" (click)="emitOrder('asc')">
+    <ng-icon name="bootstrapArrowDown"></ng-icon>
+  </button>
+</div>

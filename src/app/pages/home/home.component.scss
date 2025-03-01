@@ -1,0 +1,13 @@
+.bg {
+  background-color: #e7f6e993;
+}
+
+.scrollable {
+  height: 90%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border: none;
+  top: 2.7rem;
+}

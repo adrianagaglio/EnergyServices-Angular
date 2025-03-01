@@ -1,0 +1,87 @@
+<div class="position-relative">
+  <form #form="ngForm" (submit)="getAllByCustomerInfo()">
+    <div class="d-flex align-items-bottom gap-2">
+      <div class="flex-grow-1">
+        <label for="customerId" class="form-label">Customer:</label>
+        <select
+          class="form-select"
+          name="customerId"
+          [(ngModel)]="customerId"
+          [disabled]="vatCode != '' || pec != '' ? true : false"
+        >
+          <option class="form-control" value="">-- select customer --</option>
+          <option
+            class="form-control"
+            *ngFor="let c of customers"
+            [value]="c.id"
+          >
+            {{ c.denomination }}
+          </option>
+        </select>
+      </div>
+      <div class="flex-grow-1">
+        <label for="vatCode" class="form-label">Customer vat code:</label>
+        <input
+          id="vatCode"
+          class="form-control"
+          type="text"
+          name="vatCode"
+          [(ngModel)]="vatCode"
+          [disabled]="
+            (customerId != '' && +customerId > 0) || pec != '' ? true : false
+          "
+        />
+      </div>
+      <div class="flex-grow-1">
+        <label for="pec" class="form-label">Customer pec:</label>
+        <input
+          id="pec"
+          class="form-control"
+          type="text"
+          name="pec"
+          [(ngModel)]="pec"
+          [disabled]="
+            (customerId != '' && +customerId > 0) || vatCode != ''
+              ? true
+              : false
+          "
+        />
+      </div>
+      <div class="d-flex align-items-center align-self-end gap-3">
+        <div class="d-flex align-items-center gap-2">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="isChecked"
+            name="isChecked"
+            [(ngModel)]="isChecked"
+            (click)="toggleCheckbox()"
+            #direction
+          />
+          <label for="isChecked">Want to order DESC?</label>
+        </div>
+        <button
+          class="btn btn-success align-self-end"
+          [disabled]="
+            (customerId == '' || customerId == undefined) &&
+            vatCode == '' &&
+            pec == ''
+              ? true
+              : false
+          "
+        >
+          <ng-icon name="bootstrapSearch"></ng-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div
+    *ngIf="isLoading"
+    class="d-flex justify-content-center position-absolute start-50 translate-middle-x spinner"
+  >
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

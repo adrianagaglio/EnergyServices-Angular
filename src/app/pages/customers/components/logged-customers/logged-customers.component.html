@@ -1,0 +1,13 @@
+<div *ngIf="customer">
+  <h1 class="text-center my-4">Welcome {{ customer.denomination }}</h1>
+
+  <app-card-customer
+    [customer]="customer"
+    [isCustomer]="true"
+  ></app-card-customer>
+</div>
+<div *ngIf="isLoading" class="d-flex justify-content-center">
+  <div class="spinner-border text-success" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>

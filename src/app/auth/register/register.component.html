@@ -1,0 +1,343 @@
+<div class="container-fluid cover">
+  <div class="row">
+    <div class="col-12 col-md-5 d-none d-md-block py-2 px-4">
+      <div class="p-5"><img src="copertina1.png" width="100%" /></div>
+    </div>
+    <div class="col-12 col-md-7">
+      <div class="p-3">
+        <span class="text-primary"> ←</span
+        ><a class="cursor-pointer my-3 text-primary" (click)="goToLogin()">
+          back to login</a
+        >
+        <ngb-progressbar
+          class="my-3"
+          type="primary"
+          textType="white"
+          [value]="progress"
+          [showValue]="true"
+        />
+        <h1 class="mt-2">Register</h1>
+
+        <form [formGroup]="form" (ngSubmit)="register()">
+          <!-- User Data -->
+          <fieldset *ngIf="currentStep === 1">
+            <legend>User Data</legend>
+            <div class="form-group">
+              <label for="name">First Name</label>
+              <input
+                id="name"
+                type="text"
+                placeholder="John"
+                class="form-control"
+                formControlName="name"
+              />
+
+              <label for="surname" class="mt-3">Last Name</label>
+              <input
+                id="surname"
+                type="text"
+                placeholder="Doe"
+                class="form-control"
+                formControlName="surname"
+              />
+
+              <label for="email" class="mt-3">E-mail</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="john.doe@example.com"
+                class="form-control"
+                formControlName="email"
+              />
+
+              <label for="password" class="mt-3">Password</label>
+              <input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                class="form-control"
+                formControlName="password"
+              />
+
+              <label for="username" class="mt-3">Username</label>
+              <input
+                id="username"
+                type="text"
+                placeholder="john_doe"
+                class="form-control"
+                formControlName="username"
+              />
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary mt-4"
+              (click)="nextStep()"
+            >
+              Next
+            </button>
+          </fieldset>
+
+          <!-- Customer Data -->
+          <ng-container formGroupName="customer">
+            <fieldset *ngIf="currentStep === 2">
+              <legend>Customer Data</legend>
+              <div class="form-group">
+                <label for="denomination">Business Name</label>
+                <input
+                  id="denomination"
+                  type="text"
+                  placeholder="Acme Corp"
+                  class="form-control"
+                  formControlName="denomination"
+                />
+
+                <label for="vatCode" class="mt-3">VAT Code</label>
+                <input
+                  id="vatCode"
+                  type="text"
+                  placeholder="IT12345678901"
+                  class="form-control"
+                  formControlName="vatCode"
+                />
+
+                <label for="pec" class="mt-3">PEC</label>
+                <input
+                  id="pec"
+                  type="email"
+                  placeholder="info@pec.acmecorp.com"
+                  class="form-control"
+                  formControlName="pec"
+                />
+
+                <label for="phone" class="mt-3">Phone</label>
+                <input
+                  id="phone"
+                  type="text"
+                  placeholder="+39 0123 456789"
+                  class="form-control"
+                  formControlName="phone"
+                />
+
+                <label for="contactPhone" class="mt-3">Contact Phone</label>
+                <input
+                  id="contactPhone"
+                  type="text"
+                  placeholder="+39 9876 543210"
+                  class="form-control"
+                  formControlName="contactPhone"
+                />
+
+                <label for="type" class="mt-3">Type</label>
+                <select id="type" class="form-control" formControlName="type">
+                  <option value="">Select Type</option>
+                  <option *ngFor="let type of types" [value]="type">
+                    {{ type }}
+                  </option>
+                </select>
+              </div>
+              <button
+                type="button"
+                class="btn btn-secondary mt-4 bottone"
+                (click)="prevStep()"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary mt-4"
+                (click)="nextStep()"
+              >
+                Next
+              </button>
+            </fieldset>
+
+            <!-- Registered Office -->
+            <fieldset *ngIf="currentStep === 3">
+              <legend>Registered Office</legend>
+              <div class="form-group" formGroupName="registeredOfficeAddress">
+                <label for="registeredStreet">Street</label>
+                <input
+                  id="registeredStreet"
+                  type="text"
+                  placeholder="Main Street"
+                  class="form-control"
+                  formControlName="street"
+                />
+
+                <label for="registeredAddressNumber" class="mt-3"
+                  >Street Number</label
+                >
+                <input
+                  id="registeredAddressNumber"
+                  type="text"
+                  placeholder="123"
+                  class="form-control"
+                  formControlName="addressNumber"
+                />
+
+                <label for="registeredCap" class="mt-3">ZIP Code</label>
+                <input
+                  id="registeredCap"
+                  type="number"
+                  placeholder="00100"
+                  class="form-control"
+                  formControlName="cap"
+                />
+
+                <label for="registeredDistrict" class="mt-3">Province</label>
+                <select
+                  id="registeredDistrict"
+                  class="form-control"
+                  formControlName="districtId"
+                  (change)="onDistrictChange($event)"
+                >
+                  <option value="">Select Province</option>
+                  <option
+                    *ngFor="let district of districts"
+                    [value]="district.id"
+                  >
+                    {{ district.name }}
+                  </option>
+                </select>
+
+                <label *ngIf="selected" for="registeredCity" class="mt-3"
+                  >City</label
+                >
+                <select
+                  *ngIf="selected"
+                  id="registeredCity"
+                  class="form-control"
+                  formControlName="idCity"
+                >
+                  <option [value]="null">Select a City</option>
+                  <option *ngFor="let city of cities" [value]="city.id">
+                    {{ city.name }}
+                  </option>
+                </select>
+                <div class="form-check mt-2">
+                  <input
+                    type="checkbox"
+                    (click)="onCheckboxChange()"
+                    class="form-check-input"
+                    id="exampleCheck1"
+                    formControlName="isCheck"
+                  />
+                  <label class="form-check-label" for="exampleCheck1">
+                    The operational office is the same as the registered office
+                  </label>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-secondary mt-4 bottone"
+                (click)="prevStep()"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary mt-4"
+                (click)="nextStep()"
+              >
+                Next
+              </button>
+            </fieldset>
+
+            <!-- Operational Headquarters -->
+            <fieldset *ngIf="currentStep === 4">
+              <legend>Operational Headquarters</legend>
+              <div
+                class="form-group"
+                formGroupName="operationalHeadquartersAddress"
+              >
+                <label for="operationalStreet">Street</label>
+                <input
+                  id="operationalStreet"
+                  type="text"
+                  placeholder="Second Avenue"
+                  class="form-control"
+                  formControlName="street"
+                />
+
+                <label for="operationalAddressNumber" class="mt-3"
+                  >Street Number</label
+                >
+                <input
+                  id="operationalAddressNumber"
+                  type="text"
+                  placeholder="45B"
+                  class="form-control"
+                  formControlName="addressNumber"
+                />
+
+                <label for="operationalCap" class="mt-3">ZIP Code</label>
+                <input
+                  id="operationalCap"
+                  type="number"
+                  placeholder="20200"
+                  class="form-control"
+                  formControlName="cap"
+                />
+
+                <label for="operationalDistrict" class="mt-3">Province</label>
+                <select
+                  id="operationalDistrict"
+                  class="form-control"
+                  formControlName="districtId"
+                  (change)="onDistrictChange1($event)"
+                >
+                  <option value="">Select Province</option>
+                  <option
+                    *ngFor="let district of districts"
+                    [value]="district.id"
+                  >
+                    {{ district.name }}
+                  </option>
+                </select>
+
+                <label *ngIf="selected1" for="operationalCity" class="mt-3"
+                  >City</label
+                >
+                <select
+                  *ngIf="selected1"
+                  id="operationalCity"
+                  class="form-control"
+                  formControlName="idCity"
+                >
+                  <option [value]="null">Select a City</option>
+                  <option *ngFor="let city of cities" [value]="city.id">
+                    {{ city.name }}
+                  </option>
+                </select>
+              </div>
+              <button
+                type="button"
+                class="btn btn-secondary mt-4 bottone"
+                (click)="prevStep()"
+              >
+                Back
+              </button>
+              <button type="submit" class="btn btn-primary mt-4">
+                Register
+              </button>
+
+              <div
+                *ngIf="formvalid"
+                class="alert alert-danger mt-3"
+                role="alert"
+              >
+                Form is invalid, please fill all fields
+              </div>
+            </fieldset>
+          </ng-container>
+        </form>
+      </div>
+      <app-alert
+        *ngIf="message && message.length > 0"
+        [message]="message"
+        [type]="'success'"
+        (closeAlert)="clearMessage()"
+      ></app-alert>
+    </div>
+  </div>
+</div>

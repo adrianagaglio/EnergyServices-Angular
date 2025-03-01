@@ -1,0 +1,36 @@
+<h4>
+  Edit invoice # {{ invoice.number < 10 ? "00" : "0" }}{{ invoice.number }}
+</h4>
+<form>
+  <div class="mb-3">
+    <label class="form-label" for="status">New invoice status:</label>
+    <select
+      class="form-select"
+      id="status"
+      name="status"
+      [(ngModel)]="invoiceUpdate.status"
+    >
+      <option value="">-- select status --</option>
+      <option *ngFor="let s of statuses" [value]="s.name">
+        {{ s.name }} - {{ s.description }}
+      </option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="notes" class="form-label">Invoice notes:</label>
+    <textarea
+      class="form-control"
+      id="notes"
+      name="notes"
+      [(ngModel)]="invoiceUpdate.notes"
+    ></textarea>
+  </div>
+  <button class="btn btn-success" (click)="updateInvoice()">Save</button>
+</form>
+
+<app-alert
+  *ngIf="message && message.length > 0"
+  [message]="message"
+  [type]="'success'"
+  (closeAlert)="clearMessage()"
+></app-alert>

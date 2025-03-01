@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+$primary: green;
+$secondary: black;
+
+/* Importing Bootstrap SCSS file. */
+@import "bootstrap/scss/bootstrap";
+
+ngb-modal-window.d-block.modal.fade.show {
+  @extend .container;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+ngb-modal-window.d-block.modal.fade.show > div.modal-dialog.modal-xl {
+  top: 6rem;
+  margin-inline: 0;
+}
+
+ngb-modal-window.d-block.modal.fade.show
+  > div.modal-dialog
+  > div.modal-content {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 1px 1px 3px rgb(0 0 0 / 0.2);
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+.spinner {
+  bottom: -3.5rem;
+}
+
+// ngb-modal-backdrop.modal-backdrop.fade.show {
+//   display: none;
+// }

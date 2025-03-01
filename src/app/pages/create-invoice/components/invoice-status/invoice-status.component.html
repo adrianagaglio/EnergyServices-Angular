@@ -1,0 +1,35 @@
+<form #form="ngForm" class="d-flex align-items-end gap-2" (submit)="save()">
+  <div class="flex-grow-1">
+    <label for="name" class="form-label">Invoice status name:</label>
+    <input
+      class="form-control"
+      type="text"
+      name="name"
+      id="name"
+      [(ngModel)]="name"
+    />
+  </div>
+
+  <div class="flex-grow-1">
+    <label for="description" class="form-label"
+      >Invoice status description:</label
+    >
+    <input
+      class="form-control"
+      type="text"
+      name="description"
+      id="description"
+      [(ngModel)]="description"
+    />
+  </div>
+
+  <button class="btn btn-success">
+    <ng-icon name="bootstrapFloppy"></ng-icon>
+  </button>
+</form>
+<app-alert
+  *ngIf="message && message.length > 0"
+  [message]="message"
+  [type]="'success'"
+  (closeAlert)="clearMessage()"
+></app-alert>

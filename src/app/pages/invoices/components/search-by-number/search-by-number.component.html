@@ -1,0 +1,19 @@
+<div class="position-relative">
+  <form #form="ngForm" (submit)="getByNumber(+number.value)">
+    <label for="number" class="form-label">Invoice number:</label>
+    <div class="d-flex align-items-center gap-2">
+      <input id="number" class="form-control" type="number" #number />
+      <button class="btn btn-success">
+        <ng-icon name="bootstrapSearch"></ng-icon>
+      </button>
+    </div>
+  </form>
+  <div
+    *ngIf="isLoading"
+    class="d-flex justify-content-center position-absolute start-50 translate-middle-x spinner"
+  >
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

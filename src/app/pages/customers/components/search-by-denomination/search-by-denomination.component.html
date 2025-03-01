@@ -1,0 +1,22 @@
+<div class="position-relative">
+  <form
+    #form="ngForm"
+    (submit)="getCustomersByDenominationsContain(denomination.value)"
+  >
+    <label for="denomination" class="form-label">Denomination:</label>
+    <div class="d-flex align-items-center gap-2">
+      <input id="denomination" class="form-control" type="text" #denomination />
+      <button class="btn btn-success">
+        <ng-icon name="bootstrapSearch"></ng-icon>
+      </button>
+    </div>
+  </form>
+  <div
+    *ngIf="isLoading"
+    class="d-flex justify-content-center position-absolute start-50 translate-middle-x spinner"
+  >
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

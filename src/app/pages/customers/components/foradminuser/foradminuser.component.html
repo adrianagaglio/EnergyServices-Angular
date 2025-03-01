@@ -1,0 +1,131 @@
+<h2 class="mb-4">👩🏻‍💼 Customers</h2>
+<div class="position-relative">
+  <div>
+    <h6>Filter by</h6>
+    <div class="d-flex align-content-between justify-content-between">
+      <div class="btn-group align-self-center" role="group">
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="all"
+          autocomplete="off"
+          [(ngModel)]="searchBy"
+          value="all"
+          checked
+          (change)="getAllCustomers(0, 25)"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="all">All</label>
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byCreationDate"
+          autocomplete="off"
+          [(ngModel)]="searchBy"
+          value="byCreationDate"
+          (change)="openSearchByCreationDate()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byCreationDate"
+          >Creation Date</label
+        >
+
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byLastContact"
+          [(ngModel)]="searchBy"
+          value="byLastContact"
+          autocomplete="off"
+          (change)="openSearchByLastContact()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byLastContact"
+          >Last Contact</label
+        >
+
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          [(ngModel)]="searchBy"
+          value="byDenomination"
+          id="byDenomination"
+          autocomplete="off"
+          (change)="openSearchByDenomination()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byDenomination"
+          >Denominations</label
+        >
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byYearlyTurnover"
+          [(ngModel)]="searchBy"
+          value="byYearlyTurnover"
+          autocomplete="off"
+          (change)="openSearchByYearlyTurnover()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byYearlyTurnover"
+          >Yearly Turnover</label
+        >
+        <input
+          type="radio"
+          class="btn-check"
+          name="searchBy"
+          id="byVatcode"
+          [(ngModel)]="searchBy"
+          value="byVatcode"
+          autocomplete="off"
+          (change)="openSearchByVatcode()"
+        />
+        <label class="btn btn-outline-primary btn-sm tab" for="byVatcode"
+          >Vat Code</label
+        >
+      </div>
+      <app-cust-filters
+        (order)="order($event)"
+        (sort)="sortAsc($event)"
+      ></app-cust-filters>
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoading" class="d-flex justify-content-center">
+  <div class="spinner-border text-success" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<ng-container *ngIf="!isLoading">
+  <div *ngIf="customers && customers.length > 0" class="row py-3 gy-3">
+    <div *ngIf="isPaged">
+      <div class="d-flex align-items-center">
+        <p class="mb-0">Pages:</p>
+        <span
+          (click)="changePage(num - 1)"
+          class="badge text-primary"
+          *ngFor="let num of pages"
+          role="button"
+          >{{ num }}</span
+        >
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <ng-container *ngFor="let customer of customers">
+        <div class="col col-12 col-md-12 col-lg-6 mb-3">
+          <app-card-customer
+            [customer]="customer"
+            [isCustomer]="false"
+          ></app-card-customer>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <app-alert
+    *ngIf="message && message.length > 0"
+    [message]="message"
+    [type]="'warning'"
+    (closeAlert)="clearMessage()"
+  ></app-alert>
+</ng-container>

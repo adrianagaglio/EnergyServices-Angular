@@ -1,0 +1,27 @@
+<div class="position-relative">
+  <form #form="ngForm" (submit)="getAllByDate(date)">
+    <div class="d-flex align-items-end gap-2">
+      <div class="flex-grow-1">
+        <label for="date" class="form-label">Invoice date:</label>
+        <input
+          id="date"
+          class="form-control"
+          type="date"
+          name="date"
+          [(ngModel)]="date"
+        />
+      </div>
+      <button class="btn btn-success" [disabled]="date == ''">
+        <ng-icon name="bootstrapSearch"></ng-icon>
+      </button>
+    </div>
+  </form>
+  <div
+    *ngIf="isLoading"
+    class="d-flex justify-content-center position-absolute start-50 translate-middle-x spinner"
+  >
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

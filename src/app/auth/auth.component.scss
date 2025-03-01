@@ -1,0 +1,26 @@
+.background {
+  background-image: url('/copertina.png');
+  background-size: cover;
+  height: 100%;
+  background-position: center;
+}
+.cover{
+  height: 100%;
+  overflow: hidden;
+}
+.hide{
+  display: none;
+}
+.display{
+  display: block;
+}
+.bottone{
+  margin-right: 12px;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.round{
+  border-radius: 20px;
+  box-sizing: border-box;
+}

@@ -1,0 +1,29 @@
+<div class="d-flex align-items-center gap-2">
+  <input
+    type="radio"
+    name="sort"
+    [(ngModel)]="currentSort"
+    id="denomination"
+    value="denomination"
+    class="btn-check"
+    (click)="emitSort('denomination')"
+  />
+  <label for="denomination" class="text-success">Denomination</label>
+  <input
+    type="radio"
+    name="sort"
+    [(ngModel)]="currentSort"
+    id="vatcode"
+    value="vatcode"
+    class="btn-check"
+    (click)="emitSort('vatcode')"
+  />
+  <label for="vatcode" class="text-success">Vat Code</label>
+
+  <button class="btn btn-success" (click)="emitOrder('desc')">
+    <ng-icon name="bootstrapArrowUp"></ng-icon>
+  </button>
+  <button class="btn btn-success" (click)="emitOrder('asc')">
+    <ng-icon name="bootstrapArrowDown"></ng-icon>
+  </button>
+</div>

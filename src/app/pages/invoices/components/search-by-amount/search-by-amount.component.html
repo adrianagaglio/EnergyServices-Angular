@@ -1,0 +1,41 @@
+<div class="position-relative">
+  <form #form="ngForm" (submit)="getAllByAmountRange(+min, +max)">
+    <div class="d-flex align-items-bottom gap-2">
+      <div class="flex-grow-1">
+        <label for="min" class="form-label">Invoice min amount:</label>
+        <input
+          id="min"
+          class="form-control"
+          type="number"
+          name="min"
+          [(ngModel)]="min"
+          required
+        />
+      </div>
+      <div class="flex-grow-1">
+        <label for="max" class="form-label">Invoice max amount:</label>
+        <input
+          id="max"
+          class="form-control"
+          type="number"
+          name="max"
+          [(ngModel)]="max"
+          required
+        />
+      </div>
+      <div class="align-self-end gap-2">
+        <button class="btn btn-success" [disabled]="min == '' || max == ''">
+          <ng-icon name="bootstrapSearch"></ng-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div
+    *ngIf="isLoading"
+    class="d-flex justify-content-center position-absolute start-50 translate-middle-x spinner"
+  >
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

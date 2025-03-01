@@ -1,0 +1,30 @@
+<div class="position-relative">
+  <form
+    #form="ngForm"
+    (submit)="getByLastContact(startDate.value, endDate.value)"
+  >
+    <div class="d-flex align-items-center gap-2">
+      <div class="w-100">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input id="startDate" class="form-control" type="date" #startDate />
+      </div>
+      <div class="w-100">
+        <label for="endDate" class="form-label">End Date</label>
+        <input id="endDate" class="form-control" type="date" #endDate />
+      </div>
+      <div class="d-flex align-self-end gap-2">
+        <button class="btn btn-success align-self-end">
+          <ng-icon name="bootstrapSearch"></ng-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div
+    *ngIf="isLoading"
+    class="d-flex justify-content-center position-absolute start-50 translate-middle-x spinner"
+  >
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>
