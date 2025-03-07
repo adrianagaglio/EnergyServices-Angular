@@ -24,12 +24,11 @@ export class AuthsrvService {
     this.restoreUser();
   }
 
-  userAuthSubject$ = new BehaviorSubject<iAccess | null>(null);
+  auth$ = new BehaviorSubject<iAccess | null>(null);
 
-  registerUrl: string = environment.registerUrl;
-  loginUrl: string = environment.loginUrl;
-  baseUrl: string = environment.baseUrl + 'auth/';
-  autoLogoutTimer: any;
+  url: string = environment.baseUrl;
+  registerUrl: string = this.url + 'auth/register';
+  loginUrl: string = this.url + 'auth/login';
 
   register(user: Partial<iUser>) {
     return this.http.post<iAccess>(this.registerUrl, user);
@@ -38,58 +37,58 @@ export class AuthsrvService {
   login(userDates: iLoginRequest) {
     // qui uso una post perchè proteggere i dati sensibili e creare un token lato server
     return this.http.post<iAccess>(this.loginUrl, userDates).pipe(
-      tap((dati) => {
-        this.userAuthSubject$.next(dati);
-        localStorage.setItem('accessData', JSON.stringify(dati));
+      tap((authData) => {
+        this.auth$.next(authData);
+        localStorage.setItem('auth', JSON.stringify(authData));
       })
     );
   }
 
   logout() {
-    this.userAuthSubject$.next(null);
+    this.auth$.next(null);
     this.decodeToken.userRoles$.next([]);
-    localStorage.removeItem('accessData');
+    localStorage.removeItem('auth');
     this.router.navigate(['/auth']);
   }
 
   restoreUser() {
-    const userJson: string | null = localStorage.getItem('accessData');
+    const userJson: string | null = localStorage.getItem('auth');
     if (!userJson) return;
 
-    const accessdata: iAccess = JSON.parse(userJson);
+    const auth: iAccess = JSON.parse(userJson);
 
-    this.userAuthSubject$.next(accessdata);
+    this.auth$.next(auth);
     this.decodeToken.userRoles$.next(this.decodeToken.getRoles());
   }
 
   resetPassword(passwordResetRequest: iPasswordResetRequest) {
     return this.http.patch<iResponseStringMessage>(
-      this.baseUrl + 'reset-password',
+      this.url + 'reset-password',
       passwordResetRequest
     );
   }
 
   sendRequestPasswordReset(email: { email: string }) {
     return this.http.post<iResponseStringMessage>(
-      this.baseUrl + 'requestChangePassword',
+      this.url + 'requestChangePassword',
       email
     );
   }
 
   getByCustomerWithAppUser() {
-    return this.http.get<iAppUserResponse>(this.baseUrl + 'withAppUser');
+    return this.http.get<iAppUserResponse>(this.url + 'auth/withAppUser');
   }
 
   updateAppUser(appUser: iAppUserResponse) {
     return this.http.put<iAppUserResponse>(
-      this.baseUrl + 'withAppUser',
+      this.url + 'auth/withAppUser',
       appUser
     );
   }
 
   changePassword(changePasswordRequest: iChangePasswordRequest) {
     return this.http.patch(
-      this.baseUrl + 'change-password',
+      this.url + 'auth/change-password',
       changePasswordRequest
     );
   }

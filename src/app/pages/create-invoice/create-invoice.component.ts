@@ -26,7 +26,7 @@ export class CreateInvoiceComponent {
     private authSvc: AuthsrvService
   ) {
     if (
-      this.authSvc.userAuthSubject$ &&
+      this.authSvc.auth$ &&
       !this.decodeToken.userRoles$.getValue().includes('CUSTOMER')
     ) {
       this.customerSvc.getAll().subscribe();

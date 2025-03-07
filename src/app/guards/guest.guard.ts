@@ -20,7 +20,7 @@ export class GuestGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    this.authSvc.userAuthSubject$.subscribe((user) => {
+    this.authSvc.auth$.subscribe((user) => {
       if (user) {
         this.router.navigate(['/profile']);
         return false;

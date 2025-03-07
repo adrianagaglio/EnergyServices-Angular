@@ -38,7 +38,7 @@ export class ProfileComponent {
     private invoiceSvc: InvoiceService,
     private uploadSvc: UploadSvcService
   ) {
-    if (this.authSrv.userAuthSubject$.getValue()) {
+    if (this.authSrv.auth$.getValue()) {
       authSrv.getByCustomerWithAppUser().subscribe((data) => {
         this.customer = data;
         this.form = this.fb.group({

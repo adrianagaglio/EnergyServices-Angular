@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
     private decodeToken: DecodeTokenService,
     private router: Router
   ) {
-    if (this.authSvc.userAuthSubject$.getValue()) {
+    if (this.authSvc.auth$.getValue()) {
       authSvc.getByCustomerWithAppUser().subscribe((data) => {
         this.customer = data;
         this.avatar = this.customer.avatar;

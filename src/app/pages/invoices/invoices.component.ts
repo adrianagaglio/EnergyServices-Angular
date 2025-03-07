@@ -27,7 +27,7 @@ export class InvoicesComponent {
     private customerSvc: CustomerService
   ) {
     if (
-      this.authSvc.userAuthSubject$ &&
+      this.authSvc.auth$ &&
       !this.decodeToken.userRoles$.getValue().includes('CUSTOMER')
     ) {
       this.customerSvc.getAll().subscribe();

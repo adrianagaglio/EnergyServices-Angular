@@ -7,7 +7,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authSvc = inject(AuthsrvService);
 
   //prendo il valore di accesso (se c'è) da authSubject$
-  let accessData = authSvc.userAuthSubject$.getValue();
+  let accessData = authSvc.auth$.getValue();
 
   //se accessData non esiste mando la richiesta avanti
   if (!accessData) {
