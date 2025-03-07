@@ -2,7 +2,6 @@ import { iAccess } from './interfaces/i-access';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../environments/environment.development';
 import { iUser } from './interfaces/i-user';
 import { iLoginRequest } from './interfaces/i-login-request';
@@ -25,8 +24,6 @@ export class AuthsrvService {
     this.restoreUser();
   }
 
-  private jwtHelper: JwtHelperService = new JwtHelperService();
-
   userAuthSubject$ = new BehaviorSubject<iAccess | null>(null);
 
   registerUrl: string = environment.registerUrl;
@@ -44,10 +41,6 @@ export class AuthsrvService {
       tap((dati) => {
         this.userAuthSubject$.next(dati);
         localStorage.setItem('accessData', JSON.stringify(dati));
-
-        //recupero la data di scadenza del token
-        const date = this.jwtHelper.getTokenExpirationDate(dati.token);
-        if (date) this.autoLogout(date);
       })
     );
   }
@@ -59,25 +52,11 @@ export class AuthsrvService {
     this.router.navigate(['/auth']);
   }
 
-  autoLogout(expDate: Date) {
-    // calcolo quanto tempo manca tra la data di exp e il momento attuale
-    const expMs = expDate.getTime() - new Date().getTime();
-
-    this.autoLogoutTimer = setTimeout(() => {
-      this.logout();
-    }, expMs);
-  }
-
   restoreUser() {
     const userJson: string | null = localStorage.getItem('accessData');
     if (!userJson) return;
 
     const accessdata: iAccess = JSON.parse(userJson);
-
-    if (this.jwtHelper.isTokenExpired(accessdata.token)) {
-      localStorage.removeItem('accessData');
-      return;
-    }
 
     this.userAuthSubject$.next(accessdata);
     this.decodeToken.userRoles$.next(this.decodeToken.getRoles());
