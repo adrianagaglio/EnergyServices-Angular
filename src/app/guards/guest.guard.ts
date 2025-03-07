@@ -24,6 +24,8 @@ export class GuestGuard implements CanActivate, CanActivateChild {
       if (user) {
         this.router.navigate(['/profile']);
         return false;
+      } else {
+        return true;
       }
     });
 

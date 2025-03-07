@@ -28,6 +28,8 @@ export class AdminGuard implements CanActivate, CanActivateChild {
       if (!role.includes('ADMIN')) {
         this.router.navigate(['/profile']);
         return false;
+      } else {
+        return true;
       }
     });
 

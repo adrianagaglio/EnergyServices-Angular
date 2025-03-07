@@ -26,6 +26,8 @@ export class UserGuard implements CanActivate, CanActivateChild {
     this.decodeToken.userRoles$.subscribe((role) => {
       if (role.includes('USER')) {
         return true;
+      } else {
+        return false;
       }
     });
 

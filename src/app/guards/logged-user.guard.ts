@@ -23,6 +23,8 @@ export class LoggedGuard implements CanActivate, CanActivateChild {
       if (!user) {
         this.router.navigate(['/auth']);
         return false;
+      } else {
+        return true;
       }
     });
 

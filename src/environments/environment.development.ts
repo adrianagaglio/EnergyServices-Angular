@@ -1,6 +1,6 @@
 export const environment = {
-  registerUrl: 'https://energyservices-java.onrender.com/api/auth/register',
-  loginUrl: 'https://energyservices-java.onrender.com/api/auth/login',
-  baseUrl: 'https://energyservices-java.onrender.com/api/',
+  registerUrl: 'http://localhost:8080/api/auth/register',
+  loginUrl: 'http://localhost:8080/api/auth/login',
+  baseUrl: 'http://localhost:8080/api/',
   customerType: ['PA', 'SAS', 'SPA', 'SRL'],
 };

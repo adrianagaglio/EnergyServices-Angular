@@ -26,6 +26,8 @@ export class AdminOrUserGuard implements CanActivate, CanActivateChild {
     this.decodeToken.userRoles$.subscribe((role) => {
       if (role.includes('ADMIN') || role.includes('USER')) {
         return true;
+      } else {
+        return false;
       }
     });
 
