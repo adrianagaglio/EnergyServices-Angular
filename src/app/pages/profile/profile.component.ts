@@ -7,10 +7,10 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthsrvService } from '../../auth/authsrv.service';
 import { iAppUserResponse } from '../../auth/interfaces/i-appUserResponse';
 import { InvoiceService } from '../../services/invoice.service';
 import { UploadSvcService } from '../../services/upload-svc.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,15 +32,15 @@ export class ProfileComponent {
   message: string = '';
 
   constructor(
-    private authSrv: AuthsrvService,
+    private authSvc: AuthService,
     private router: Router,
     private fb: FormBuilder,
     private invoiceSvc: InvoiceService,
     private uploadSvc: UploadSvcService
   ) {
-    if (this.authSrv.auth$.getValue()) {
-      authSrv.getByCustomerWithAppUser().subscribe((data) => {
-        this.customer = data;
+    if (this.authSvc.auth$.getValue()) {
+      authSvc.getByCustomerWithAppUser().subscribe((customer) => {
+        this.customer = customer;
         this.form = this.fb.group({
           id: [this.customer.id, [Validators.required]],
           name: [this.customer.name, [Validators.required]],
@@ -76,7 +76,7 @@ export class ProfileComponent {
   }
 
   sendData() {
-    this.authSrv.updateAppUser(this.form.value).subscribe((data) => {
+    this.authSvc.updateAppUser(this.form.value).subscribe((data) => {
       console.log(data);
       this.isEditing = false;
       this.message = 'Profile info updated';
@@ -124,7 +124,7 @@ export class ProfileComponent {
   }
 
   savePassword() {
-    this.authSrv.changePassword(this.passForm.value).subscribe((data) => {
+    this.authSvc.changePassword(this.passForm.value).subscribe((data) => {
       console.log(data);
       this.isEditingPassword = false;
       this.isEditing = false;

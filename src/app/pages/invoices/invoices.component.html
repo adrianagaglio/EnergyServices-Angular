@@ -44,7 +44,7 @@
         <label class="btn btn-outline-primary btn-sm tab" for="byStatus"
           >Status</label
         >
-        <ng-container *ngIf="!roles.includes('CUSTOMER')">
+        <ng-container *ngIf="role === 'CUSTOMER'">
           <input
             type="radio"
             class="btn-check"

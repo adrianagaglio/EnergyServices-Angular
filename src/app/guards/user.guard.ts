@@ -8,23 +8,20 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { DecodeTokenService } from '../services/decode-token.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserGuard implements CanActivate, CanActivateChild {
-  constructor(
-    private decodeToken: DecodeTokenService,
-    private router: Router
-  ) {}
+  constructor(private authSvc: AuthService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    this.decodeToken.userRoles$.subscribe((role) => {
-      if (role.includes('USER')) {
+    this.authSvc.role$.subscribe((role) => {
+      if (role === 'USER') {
         return true;
       } else {
         return false;

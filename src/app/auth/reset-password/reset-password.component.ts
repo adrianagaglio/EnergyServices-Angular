@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { iPasswordResetRequest } from '../interfaces/i-password-reset-request';
-import { AuthsrvService } from '../authsrv.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -15,33 +15,22 @@ export class ResetPasswordComponent {
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private authSvc = inject(AuthsrvService);
-  private jwtHelper: JwtHelperService = new JwtHelperService();
+  private authSvc = inject(AuthService);
 
-  isTokenExpired: boolean = false;
   token: string | null = null;
-  username: string | null = null;
 
   password: string = '';
 
   constructor() {
-    this.token = this.route.snapshot.paramMap.get('token');
-
-    if (this.token) {
-      this.isTokenExpired = this.jwtHelper.isTokenExpired(this.token);
-      this.username = this.jwtHelper.decodeToken(this.token).sub;
-    }
-    if (this.isTokenExpired) {
-      this.token = null;
-      this.username = null;
-    }
     this.form = new FormGroup({
       password: new FormControl('', [Validators.required]),
-      token: new FormControl(this.token, [Validators.required]),
+      token: new FormControl(null, [Validators.required]),
     });
-  }
 
-  ngOnInit() {}
+    this.token = this.route.snapshot.paramMap.get('token');
+
+    this.form.get('token')?.setValue(this.token);
+  }
 
   resetPassword() {
     if (this.form.valid) {

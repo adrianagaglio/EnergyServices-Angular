@@ -1,4 +1,3 @@
-import { DecodeTokenService } from './../services/decode-token.service';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -9,23 +8,20 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthsrvService } from '../auth/authsrv.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminGuard implements CanActivate, CanActivateChild {
-  constructor(
-    private decodeToken: DecodeTokenService,
-    private router: Router
-  ) {}
+  constructor(private authSvc: AuthService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    this.decodeToken.userRoles$.subscribe((role) => {
-      if (!role.includes('ADMIN')) {
+    this.authSvc.role$.subscribe((role) => {
+      if (role !== 'ADMIN') {
         this.router.navigate(['/profile']);
         return false;
       } else {

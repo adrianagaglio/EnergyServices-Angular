@@ -7,7 +7,6 @@ import { iUser } from './interfaces/i-user';
 import { iLoginRequest } from './interfaces/i-login-request';
 import { BehaviorSubject, tap } from 'rxjs';
 import { iPasswordResetRequest } from './interfaces/i-password-reset-request';
-import { DecodeTokenService } from '../services/decode-token.service';
 import { iResponseStringMessage } from './interfaces/i-response-string-message';
 import { iAppUserResponse } from './interfaces/i-appUserResponse';
 import { iChangePasswordRequest } from './interfaces/i-change-password-request';
@@ -15,16 +14,13 @@ import { iChangePasswordRequest } from './interfaces/i-change-password-request';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthsrvService {
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private decodeToken: DecodeTokenService
-  ) {
+export class AuthService {
+  constructor(private http: HttpClient, private router: Router) {
     this.restoreUser();
   }
 
   auth$ = new BehaviorSubject<iAccess | null>(null);
+  role$ = new BehaviorSubject<string | null>(null);
 
   url: string = environment.baseUrl;
   registerUrl: string = this.url + 'auth/register';
@@ -39,6 +35,7 @@ export class AuthsrvService {
     return this.http.post<iAccess>(this.loginUrl, userDates).pipe(
       tap((authData) => {
         this.auth$.next(authData);
+        this.role$.next(authData.role);
         localStorage.setItem('auth', JSON.stringify(authData));
       })
     );
@@ -46,7 +43,6 @@ export class AuthsrvService {
 
   logout() {
     this.auth$.next(null);
-    this.decodeToken.userRoles$.next([]);
     localStorage.removeItem('auth');
     this.router.navigate(['/auth']);
   }
@@ -58,7 +54,7 @@ export class AuthsrvService {
     const auth: iAccess = JSON.parse(userJson);
 
     this.auth$.next(auth);
-    this.decodeToken.userRoles$.next(this.decodeToken.getRoles());
+    this.role$.next(auth.role);
   }
 
   resetPassword(passwordResetRequest: iPasswordResetRequest) {

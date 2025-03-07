@@ -1,10 +1,11 @@
 import { Router } from '@angular/router';
-import { AuthsrvService } from './authsrv.service';
+
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { iLoginRequest } from './interfaces/i-login-request';
-import { DecodeTokenService } from '../services/decode-token.service';
 import { tap } from 'rxjs';
+import { iAccess } from './interfaces/i-access';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -16,11 +17,7 @@ export class AuthComponent {
 
   message!: string;
 
-  constructor(
-    private authSvc: AuthsrvService,
-    private router: Router,
-    private decodeToken: DecodeTokenService
-  ) {
+  constructor(private authSvc: AuthService, private router: Router) {
     this.form = new FormGroup({
       identifier: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
@@ -33,15 +30,11 @@ export class AuthComponent {
       const formData: iLoginRequest = this.form.value;
       this.authSvc
         .login(formData)
-        .pipe(
-          tap((res) =>
-            this.decodeToken.userRoles$.next(this.decodeToken.getRoles())
-          )
-        )
-        .subscribe((res) => {
+        .pipe(tap((auth) => this.authSvc.role$.next(auth.role)))
+        .subscribe((auth: iAccess) => {
           this.message = 'Logged in successfully';
           setTimeout(() => {
-            if (!this.decodeToken.userRoles$.getValue().includes('CUSTOMER')) {
+            if (auth.role === 'CUSTOMER') {
               this.router.navigate(['/']);
             } else {
               this.router.navigate(['/customers']);

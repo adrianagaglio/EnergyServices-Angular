@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthsrvService } from '../authsrv.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -13,7 +13,7 @@ export class ForgotPasswordComponent {
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private authSvc = inject(AuthsrvService);
+  private authSvc = inject(AuthService);
 
   email: { email: string } = { email: '' };
 

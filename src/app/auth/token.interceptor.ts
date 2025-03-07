@@ -1,10 +1,10 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { AuthsrvService } from './authsrv.service';
+import { AuthService } from './auth.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   //uso inject per ottenere il service
-  const authSvc = inject(AuthsrvService);
+  const authSvc = inject(AuthService);
 
   //prendo il valore di accesso (se c'è) da authSubject$
   let accessData = authSvc.auth$.getValue();

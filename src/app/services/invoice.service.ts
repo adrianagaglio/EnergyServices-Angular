@@ -1,23 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap, tap } from 'rxjs';
 import { iInvoiceresponse } from '../interfaces/iinvoiceresponse';
-import { iInvoiceresponseforcustomer } from '../interfaces/iinvoiceresponseforcustomer';
-import { DecodeTokenService } from './decode-token.service';
+
 import { iInvoiceupdaterequest } from '../interfaces/iinvoiceupdaterequest';
 import { iInvoicerequest } from '../interfaces/iinvoicerequest';
 import { iInvoicepageresponse } from '../interfaces/iinvoicepageresponse';
 import { iTotalresponse } from '../interfaces/itotalresponse';
+import { iInvoiceresponseforcustomer } from '../interfaces/iinvoiceresponseforcustomer';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InvoiceService {
-  constructor(
-    private http: HttpClient,
-    private decodeToken: DecodeTokenService
-  ) {}
+  constructor(private http: HttpClient, private authSvc: AuthService) {}
 
   url: string = environment.baseUrl + 'invoice';
 
@@ -46,22 +44,32 @@ export class InvoiceService {
   }
 
   getById(id: number): Observable<any> {
-    if (this.decodeToken.userRoles$.value.includes('CUSTOMER')) {
-      return this.http.get<iInvoiceresponseforcustomer>(
-        `${this.url}/invoce/${id}`
-      );
-    }
-    return this.http.get<iInvoiceresponse>(`${this.url}/${id}`);
+    return this.authSvc.role$.pipe(
+      switchMap((role) => {
+        if (role === 'CUSTOMER') {
+          return this.http.get<iInvoiceresponseforcustomer>(
+            `${this.url}/invoce/${id}`
+          );
+        } else {
+          return this.http.get<iInvoiceresponse>(`${this.url}/${id}`);
+        }
+      })
+    );
   }
 
   getByNumber(number: number): Observable<any> {
-    if (this.decodeToken.userRoles$.value.includes('CUSTOMER')) {
-      return this.http.get<iInvoiceresponseforcustomer>(
-        `${this.url}/by-number?number=${number}`
-      );
-    }
-    return this.http.get<iInvoiceresponse>(
-      `${this.url}/by-number?number=${number}`
+    return this.authSvc.role$.pipe(
+      switchMap((role) => {
+        if (role === 'CUSTOMER') {
+          return this.http.get<iInvoiceresponseforcustomer>(
+            `${this.url}/by-number?number=${number}`
+          );
+        } else {
+          return this.http.get<iInvoiceresponse>(
+            `${this.url}/by-number?number=${number}`
+          );
+        }
+      })
     );
   }
 

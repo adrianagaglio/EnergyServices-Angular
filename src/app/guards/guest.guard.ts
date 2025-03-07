@@ -8,20 +8,21 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthsrvService } from '../auth/authsrv.service';
+import { AuthService } from '../auth/auth.service';
+import { iAccess } from '../auth/interfaces/i-access';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GuestGuard implements CanActivate, CanActivateChild {
-  constructor(private authSvc: AuthsrvService, private router: Router) {}
+  constructor(private authSvc: AuthService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    this.authSvc.auth$.subscribe((user) => {
-      if (user) {
+    this.authSvc.auth$.subscribe((auth) => {
+      if (auth) {
         this.router.navigate(['/profile']);
         return false;
       } else {
