@@ -188,13 +188,13 @@
                 <select
                   id="registeredDistrict"
                   class="form-control"
-                  formControlName="districtId"
+                  formControlName="district"
                   (change)="onDistrictChange($event)"
                 >
                   <option value="">Select Province</option>
                   <option
                     *ngFor="let district of districts"
-                    [value]="district.id"
+                    [value]="district.name"
                   >
                     {{ district.name }}
                   </option>
@@ -207,10 +207,10 @@
                   *ngIf="selected"
                   id="registeredCity"
                   class="form-control"
-                  formControlName="idCity"
+                  formControlName="city"
                 >
                   <option [value]="null">Select a City</option>
-                  <option *ngFor="let city of cities" [value]="city.id">
+                  <option *ngFor="let city of cities" [value]="city.name">
                     {{ city.name }}
                   </option>
                 </select>
@@ -283,7 +283,7 @@
                 <select
                   id="operationalDistrict"
                   class="form-control"
-                  formControlName="districtId"
+                  formControlName="district"
                   (change)="onDistrictChange1($event)"
                 >
                   <option value="">Select Province</option>
@@ -302,10 +302,10 @@
                   *ngIf="selected1"
                   id="operationalCity"
                   class="form-control"
-                  formControlName="idCity"
+                  formControlName="city"
                 >
                   <option [value]="null">Select a City</option>
-                  <option *ngFor="let city of cities" [value]="city.id">
+                  <option *ngFor="let city of cities" [value]="city.name">
                     {{ city.name }}
                   </option>
                 </select>

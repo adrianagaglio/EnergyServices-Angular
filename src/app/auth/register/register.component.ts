@@ -58,8 +58,8 @@ export class RegisterComponent implements OnInit {
             null,
             [Validators.required, Validators.min(10000), Validators.max(99999)],
           ],
-          districtId: ['', Validators.required],
-          idCity: ['', Validators.required],
+          district: ['', Validators.required],
+          city: ['', Validators.required],
           isCheck: [false],
         }),
         operationalHeadquartersAddress: this.fb.group({
@@ -69,8 +69,8 @@ export class RegisterComponent implements OnInit {
             null,
             [Validators.required, Validators.min(10000), Validators.max(99999)],
           ],
-          districtId: ['', Validators.required],
-          idCity: ['', Validators.required],
+          district: ['', Validators.required],
+          city: ['', Validators.required],
         }),
       }),
       avatar: [''],
@@ -105,8 +105,7 @@ export class RegisterComponent implements OnInit {
   onDistrictChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
     if (selectedValue) {
-      console.log(selectedValue);
-      this.cityService.getCitiesByDistrictId(+selectedValue).subscribe({
+      this.cityService.getCitiesByDistrict(selectedValue).subscribe({
         next: (data) => {
           this.cities = data;
           this.selected = true;
@@ -123,8 +122,7 @@ export class RegisterComponent implements OnInit {
   onDistrictChange1(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
     if (selectedValue) {
-      console.log(selectedValue);
-      this.cityService.getCitiesByDistrictId(Number(selectedValue)).subscribe({
+      this.cityService.getCitiesByDistrict(selectedValue).subscribe({
         next: (data) => {
           this.cities = data;
           this.selected1 = true;
@@ -176,12 +174,12 @@ export class RegisterComponent implements OnInit {
     const isCheck = this.form.get(
       'customer.registeredOfficeAddress.isCheck'
     )?.value;
-    console.log(isCheck);
     this.isCheck = isCheck;
     if (isCheck === false) {
       const legalAddress = this.form.get(
         'customer.registeredOfficeAddress'
       )?.value;
+      console.log(legalAddress);
       const operationalAddress = this.form.get(
         'customer.operationalHeadquartersAddress'
       );
