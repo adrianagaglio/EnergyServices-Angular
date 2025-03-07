@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { CustomerService } from '../../services/customer.service';
-import { DecodeTokenService } from '../../services/decode-token.service';
-import { iCustomer } from '../../interfaces/icustomer';
-import { Icustomerpageresponse } from '../../interfaces/icustomerpageresponse';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-customers',
@@ -12,17 +10,17 @@ import { Icustomerpageresponse } from '../../interfaces/icustomerpageresponse';
 export class CustomersComponent {
   constructor(
     private customerSvc: CustomerService,
-    private decodeToken: DecodeTokenService
+    private authSvc: AuthService
   ) {
-    this.roles = this.decodeToken.userRoles$.getValue();
-
-    if (this.roles.includes('CUSTOMER')) {
-      this.isCustomer = true;
-    } else {
-      this.isCustomer = false;
-    }
+    this.authSvc.role$.subscribe((role) => {
+      if (role && role === 'CUSTOMER') {
+        this.isCustomer = true;
+      } else {
+        this.isCustomer = false;
+      }
+    });
   }
-  roles: string[] = [];
+
   isCustomer: boolean = false;
 
   ngOnInit(): void {}

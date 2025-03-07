@@ -8,31 +8,29 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { DecodeTokenService } from '../services/decode-token.service';
+import { AuthService } from '../auth/auth.service';
+import { of, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminOrUserGuard implements CanActivate, CanActivateChild {
-  constructor(
-    private decodeToken: DecodeTokenService,
-    private router: Router
-  ) {}
+  constructor(private authSvc: AuthService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    this.decodeToken.userRoles$.subscribe((role) => {
-      if (role.includes('ADMIN') || role.includes('USER')) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    this.router.navigate(['/profile']);
-    return false;
+    return this.authSvc.role$.pipe(
+      switchMap((role) => {
+        if (role === 'ADMIN' || role === 'USER') {
+          return of(true);
+        } else {
+          this.router.navigate(['/profile']);
+          return of(false);
+        }
+      })
+    );
   }
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,

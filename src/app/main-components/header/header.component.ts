@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthsrvService } from '../../auth/authsrv.service';
-import { DecodeTokenService } from '../../services/decode-token.service';
-import { Subscription } from 'rxjs';
 import { iAppUserResponse } from '../../auth/interfaces/i-appUserResponse';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,25 +12,20 @@ export class HeaderComponent implements OnInit {
   customer!: iAppUserResponse;
   avatar: string = '';
 
-  constructor(
-    private authSvc: AuthsrvService,
-    private decodeToken: DecodeTokenService,
-    private router: Router
-  ) {
-    if (this.authSvc.userAuthSubject$.getValue()) {
+  constructor(private authSvc: AuthService, private router: Router) {
+    if (this.authSvc.auth$.getValue()) {
       authSvc.getByCustomerWithAppUser().subscribe((data) => {
         this.customer = data;
         this.avatar = this.customer.avatar;
       });
     }
   }
-  roles: string[] = [];
-  private rolesSubscription!: Subscription;
+  role!: string;
   isActive: boolean = false;
 
   ngOnInit(): void {
-    this.rolesSubscription = this.decodeToken.userRoles$.subscribe((roles) => {
-      this.roles = roles || [];
+    this.authSvc.role$.subscribe((role) => {
+      if (role) this.role = role;
     });
   }
 

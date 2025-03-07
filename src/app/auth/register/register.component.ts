@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
@@ -6,12 +5,11 @@ import {
   Validators,
   FormBuilder,
 } from '@angular/forms';
-import { AuthsrvService } from '../authsrv.service';
 import { Router } from '@angular/router';
 import { CitysrvService } from '../../services/citysrv.service';
 import { iDistrictResponse } from '../../interfaces/idistrictresponse';
 import { iCityResponse } from '../../interfaces/icityresponse';
-import { DecodeTokenService } from '../../services/decode-token.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-register',
@@ -35,11 +33,10 @@ export class RegisterComponent implements OnInit {
   message!: string;
 
   constructor(
-    private authSrv: AuthsrvService,
+    private authSrv: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    private cityService: CitysrvService,
-    private decodeToken: DecodeTokenService
+    private cityService: CitysrvService
   ) {
     this.form = this.fb.group({
       name: ['', [Validators.required]],

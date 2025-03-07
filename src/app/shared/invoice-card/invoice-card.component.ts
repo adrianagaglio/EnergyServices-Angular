@@ -1,13 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
 import { iInvoiceresponse } from '../../interfaces/iinvoiceresponse';
-import { DecodeTokenService } from '../../services/decode-token.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UpdateInvoiceComponent } from './update-invoice/update-invoice.component';
-import { iInvoicestatus } from '../../interfaces/iinvoicestatus';
-import { iInvoiceresponseforcustomer } from '../../interfaces/iinvoiceresponseforcustomer';
 import { InvoiceService } from '../../services/invoice.service';
 import { iInvoiceupdaterequest } from '../../interfaces/iinvoiceupdaterequest';
 import { Router } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-invoice-card',
@@ -16,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class InvoiceCardComponent {
   constructor(
-    private decodeToken: DecodeTokenService,
+    private authSvc: AuthService,
     private invoiceSvc: InvoiceService,
     private router: Router
   ) {}
@@ -29,16 +27,17 @@ export class InvoiceCardComponent {
   isHome: boolean = false;
 
   ngOnInit() {
-    this.roles = this.decodeToken.userRoles$.getValue();
-    if (this.roles.includes('CUSTOMER')) {
-      if (
-        this.invoice!.status == 'SENT' ||
-        this.invoice!.status == 'PARTIALLY PAID' ||
-        this.invoice!.status == 'OVERDUE'
-      ) {
-        this.toPay = true;
+    this.authSvc.role$.subscribe((role) => {
+      if (role === 'CUSTOMER') {
+        if (
+          this.invoice!.status == 'SENT' ||
+          this.invoice!.status == 'PARTIALLY PAID' ||
+          this.invoice!.status == 'OVERDUE'
+        ) {
+          this.toPay = true;
+        }
       }
-    }
+    });
 
     if (this.router.url == '/') {
       this.isHome = true;

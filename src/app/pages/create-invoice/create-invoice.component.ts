@@ -5,11 +5,9 @@ import { CustomerService } from '../../services/customer.service';
 import { iCustomer } from '../../interfaces/icustomer';
 import { iInvoiceStatus } from '../../interfaces/iinvoice-status';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { iInvoicerequest } from '../../interfaces/iinvoicerequest';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InvoiceStatusComponent } from './components/invoice-status/invoice-status.component';
-import { DecodeTokenService } from '../../services/decode-token.service';
-import { AuthsrvService } from '../../auth/authsrv.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-create-invoice',
@@ -22,13 +20,9 @@ export class CreateInvoiceComponent {
     private statusSvc: InvoiceStatusService,
     private customerSvc: CustomerService,
     private fb: FormBuilder,
-    private decodeToken: DecodeTokenService,
-    private authSvc: AuthsrvService
+    private authSvc: AuthService
   ) {
-    if (
-      this.authSvc.userAuthSubject$ &&
-      !this.decodeToken.userRoles$.getValue().includes('CUSTOMER')
-    ) {
+    if (this.authSvc.auth$ && this.authSvc.role$.getValue() !== 'CUSTOMER') {
       this.customerSvc.getAll().subscribe();
     }
   }

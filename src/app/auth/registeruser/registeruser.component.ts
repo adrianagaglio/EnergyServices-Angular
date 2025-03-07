@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AuthsrvService } from '../authsrv.service';
 import { Router } from '@angular/router';
 import { CitysrvService } from '../../services/citysrv.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-registeruser',
@@ -17,7 +17,7 @@ export class RegisteruserComponent {
   message!: string;
 
   constructor(
-    private authSrv: AuthsrvService,
+    private authSvc: AuthService,
     private router: Router,
     private fb: FormBuilder,
     private cityService: CitysrvService
@@ -34,7 +34,7 @@ export class RegisteruserComponent {
   register(): void {
     if (this.form.valid) {
       console.log('Dati inviati:', this.form.value);
-      this.authSrv.register(this.form.value).subscribe((res) => {
+      this.authSvc.register(this.form.value).subscribe((res) => {
         this.message = 'User successfully registered';
         setTimeout(() => {
           this.router.navigate(['/']);

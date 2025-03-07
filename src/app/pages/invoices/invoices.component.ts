@@ -1,8 +1,8 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { InvoiceService } from '../../services/invoice.service';
 import { iInvoiceresponse } from '../../interfaces/iinvoiceresponse';
 import { iInvoiceresponseforcustomer } from '../../interfaces/iinvoiceresponseforcustomer';
-import { NgbModal, NgbAlert } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SearchByNumberComponent } from './components/search-by-number/search-by-number.component';
 import { SearchByCustomerComponent } from './components/search-by-customer/search-by-customer.component';
 import { SearchByStatusComponent } from './components/search-by-status/search-by-status.component';
@@ -10,9 +10,8 @@ import { SearchByCustomerInfoComponent } from './components/search-by-customer-i
 import { SearchByDateComponent } from './components/search-by-date/search-by-date.component';
 import { SearchByYearComponent } from './components/search-by-year/search-by-year.component';
 import { SearchByAmountComponent } from './components/search-by-amount/search-by-amount.component';
-import { DecodeTokenService } from '../../services/decode-token.service';
 import { CustomerService } from '../../services/customer.service';
-import { AuthsrvService } from '../../auth/authsrv.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-invoices',
@@ -22,14 +21,10 @@ import { AuthsrvService } from '../../auth/authsrv.service';
 export class InvoicesComponent {
   constructor(
     private invoiceSvc: InvoiceService,
-    private authSvc: AuthsrvService,
-    private decodeToken: DecodeTokenService,
+    private authSvc: AuthService,
     private customerSvc: CustomerService
   ) {
-    if (
-      this.authSvc.userAuthSubject$ &&
-      !this.decodeToken.userRoles$.getValue().includes('CUSTOMER')
-    ) {
+    if (this.authSvc.auth$ && this.authSvc.role$.getValue() !== 'CUSTOMER') {
       this.customerSvc.getAll().subscribe();
     }
   }
@@ -60,10 +55,12 @@ export class InvoicesComponent {
   customerFromlocalStorage: string | null = null;
   searchBy: string = 'all';
 
-  roles: string[] = [];
+  role!: string;
 
   ngOnInit() {
-    this.roles = this.decodeToken.userRoles$.getValue();
+    this.authSvc.role$.subscribe((role) => {
+      if (role) this.role = role;
+    });
 
     this.customerFromlocalStorage =
       sessionStorage.getItem('customerToInvoices');
@@ -77,7 +74,7 @@ export class InvoicesComponent {
   }
 
   getAll(page: number, sort: string) {
-    if (!this.roles.includes('CUSTOMER')) {
+    if (this.role !== 'CUSTOMER') {
       this.invoiceSvc.getAllPaged(page, 10, sort).subscribe((res) => {
         this.isLoading = false;
         this.isPaged = true;
@@ -125,7 +122,7 @@ export class InvoicesComponent {
       .then((res) => {
         this.isPaged = false;
         this.searchBy = '';
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = res;
         } else {
           this.invoices = res;
@@ -151,7 +148,7 @@ export class InvoicesComponent {
       .then((res) => {
         this.isPaged = false;
         this.searchBy = '';
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = res;
         } else {
           this.invoices = res;
@@ -200,7 +197,7 @@ export class InvoicesComponent {
       .then((res) => {
         this.isPaged = false;
         this.searchBy = '';
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = res;
         } else {
           this.invoices = res;
@@ -226,7 +223,7 @@ export class InvoicesComponent {
       .then((res) => {
         this.isPaged = false;
         this.searchBy = '';
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = res;
         } else {
           this.invoices = res;
@@ -252,7 +249,7 @@ export class InvoicesComponent {
       .then((res) => {
         this.isPaged = false;
         this.searchBy = '';
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = res;
         } else {
           this.invoices = res;
@@ -277,7 +274,7 @@ export class InvoicesComponent {
         if (this.searchBy == 'all') {
           this.getAll(0, 'number,asc');
         }
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = this.customerInvoices.sort((a, b) => {
             return a.number - b.number;
           });
@@ -292,7 +289,7 @@ export class InvoicesComponent {
         if (this.searchBy == 'all') {
           this.getAll(0, 'date,asc');
         }
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = this.customerInvoices.sort((a, b) => {
             return new Date(a.date).getTime() - new Date(b.date).getTime();
           });
@@ -307,7 +304,7 @@ export class InvoicesComponent {
         if (this.searchBy == 'all') {
           this.getAll(0, 'status,asc');
         }
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = this.customerInvoices.sort((a, b) => {
             return a.status.localeCompare(b.status);
           });
@@ -327,7 +324,7 @@ export class InvoicesComponent {
         if (this.searchBy == 'all') {
           this.getAll(0, 'number,desc');
         }
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = this.customerInvoices.sort((a, b) => {
             return b.number - a.number;
           });
@@ -342,7 +339,7 @@ export class InvoicesComponent {
         if (this.searchBy == 'all') {
           this.getAll(0, 'date,desc');
         }
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = this.customerInvoices.sort((a, b) => {
             return new Date(b.date).getTime() - new Date(a.date).getTime();
           });
@@ -356,7 +353,7 @@ export class InvoicesComponent {
         if (this.searchBy == 'all') {
           this.getAll(0, 'status,desc');
         }
-        if (this.roles.includes('CUSTOMER')) {
+        if (this.role === 'CUSTOMER') {
           this.customerInvoices = this.customerInvoices.sort((a, b) => {
             return b.status.localeCompare(a.status);
           });
