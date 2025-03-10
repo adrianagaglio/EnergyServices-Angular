@@ -4,4 +4,6 @@ export interface iAddressResponse {
   addressNumber: string;
   cap: number;
   city: string;
+  district: string;
+  districtCode: string;
 }

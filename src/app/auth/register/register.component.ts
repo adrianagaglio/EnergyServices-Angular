@@ -17,7 +17,7 @@ import { AuthService } from '../auth.service';
   styleUrl: './register.component.scss',
 })
 export class RegisterComponent implements OnInit {
-  form: FormGroup;
+  form!: FormGroup;
   types = ['PA', 'SAS', 'SPA', 'SRL'];
   districts: iDistrictResponse[] = [];
   cities: iCityResponse[] = [];
@@ -37,7 +37,22 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private cityService: CitysrvService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.initForm();
+
+    this.cityService.getAllDistricts().subscribe({
+      next: (districts) => {
+        this.districts = districts;
+      },
+      error: (error) => {
+        console.error('Errore nel caricamento dei distretti:', error);
+      },
+    });
+  }
+
+  private initForm() {
     this.form = this.fb.group({
       name: ['', [Validators.required]],
       surname: ['', [Validators.required]],
@@ -59,6 +74,7 @@ export class RegisterComponent implements OnInit {
             [Validators.required, Validators.min(10000), Validators.max(99999)],
           ],
           district: ['', Validators.required],
+          districtCode: [''],
           city: ['', Validators.required],
           isCheck: [false],
         }),
@@ -70,6 +86,7 @@ export class RegisterComponent implements OnInit {
             [Validators.required, Validators.min(10000), Validators.max(99999)],
           ],
           district: ['', Validators.required],
+          districtCode: [''],
           city: ['', Validators.required],
         }),
       }),
@@ -77,15 +94,35 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.cityService.getAllDistricts().subscribe({
-      next: (data) => {
-        this.districts = data;
-      },
-      error: (error) => {
-        console.error('Errore nel caricamento dei distretti:', error);
-      },
-    });
+  invalidAccountData() {
+    return (
+      this.form.get('name')?.invalid ||
+      this.form.get('surname')?.invalid ||
+      this.form.get('email')?.invalid ||
+      this.form.get('password')?.invalid ||
+      this.form.get('username')?.invalid
+    );
+  }
+
+  invalidCustomerData() {
+    return (
+      this.form.get('customer.denomination')?.invalid ||
+      this.form.get('customer.vatCode')?.invalid ||
+      this.form.get('customer.pec')?.invalid ||
+      this.form.get('customer.phone')?.invalid ||
+      this.form.get('customer.contactPhone')?.invalid ||
+      this.form.get('customer.type')?.invalid
+    );
+  }
+
+  invalidAddressData(type: string) {
+    return (
+      this.form.get('customer.' + type + '.street')?.invalid ||
+      this.form.get('customer.' + type + '.addressNumber')?.invalid ||
+      this.form.get('customer.' + type + '.cap')?.invalid ||
+      this.form.get('customer.' + type + '.district')?.invalid ||
+      this.form.get('customer.' + type + '.city')?.invalid
+    );
   }
 
   register(): void {
@@ -102,12 +139,23 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  setCode(code: string) {
+    console.log(code);
+  }
+
   onDistrictChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
+
+    const code = this.districts.find((d) => d.name === selectedValue)?.code;
+
+    this.form
+      .get('customer.registeredOfficeAddress.districtCode')!
+      .setValue(code);
+
     if (selectedValue) {
       this.cityService.getCitiesByDistrict(selectedValue).subscribe({
-        next: (data) => {
-          this.cities = data;
+        next: (cities) => {
+          this.cities = cities;
           this.selected = true;
         },
         error: (error) => {
@@ -121,10 +169,17 @@ export class RegisterComponent implements OnInit {
 
   onDistrictChange1(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
+
+    const code = this.districts.find((d) => d.name === selectedValue)?.code;
+
+    this.form
+      .get('customer.operationalHeadquartersAddress.districtCode')!
+      .setValue(code);
+
     if (selectedValue) {
       this.cityService.getCitiesByDistrict(selectedValue).subscribe({
-        next: (data) => {
-          this.cities = data;
+        next: (cities) => {
+          this.cities = cities;
           this.selected1 = true;
         },
         error: (error) => {
@@ -171,19 +226,18 @@ export class RegisterComponent implements OnInit {
     this.router.navigate(['/auth']);
   }
   onCheckboxChange(): void {
-    const isCheck = this.form.get(
+    this.isCheck = this.form.get(
       'customer.registeredOfficeAddress.isCheck'
     )?.value;
-    this.isCheck = isCheck;
-    if (isCheck === false) {
+    if (this.isCheck) {
       const legalAddress = this.form.get(
         'customer.registeredOfficeAddress'
       )?.value;
-      console.log(legalAddress);
       const operationalAddress = this.form.get(
         'customer.operationalHeadquartersAddress'
       );
       operationalAddress?.patchValue(legalAddress);
+      this.selected1 = true;
     } else {
       const operationalAddress = this.form.get(
         'customer.operationalHeadquartersAddress'

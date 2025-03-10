@@ -30,6 +30,7 @@
                 placeholder="John"
                 class="form-control"
                 formControlName="name"
+                [ngClass]="{ 'border-danger': isInValidTouched('name') }"
               />
 
               <label for="surname" class="mt-3">Last Name</label>
@@ -39,6 +40,7 @@
                 placeholder="Doe"
                 class="form-control"
                 formControlName="surname"
+                [ngClass]="{ 'border-danger': isInValidTouched('surname') }"
               />
 
               <label for="email" class="mt-3">E-mail</label>
@@ -48,6 +50,7 @@
                 placeholder="john.doe@example.com"
                 class="form-control"
                 formControlName="email"
+                [ngClass]="{ 'border-danger': isInValidTouched('email') }"
               />
 
               <label for="password" class="mt-3">Password</label>
@@ -57,6 +60,7 @@
                 placeholder="••••••••"
                 class="form-control"
                 formControlName="password"
+                [ngClass]="{ 'border-danger': isInValidTouched('password') }"
               />
 
               <label for="username" class="mt-3">Username</label>
@@ -66,9 +70,11 @@
                 placeholder="john_doe"
                 class="form-control"
                 formControlName="username"
+                [ngClass]="{ 'border-danger': isInValidTouched('username') }"
               />
             </div>
             <button
+              [disabled]="invalidAccountData()"
               type="button"
               class="btn btn-primary mt-4"
               (click)="nextStep()"
@@ -89,6 +95,9 @@
                   placeholder="Acme Corp"
                   class="form-control"
                   formControlName="denomination"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched('customer.denomination')
+                  }"
                 />
 
                 <label for="vatCode" class="mt-3">VAT Code</label>
@@ -98,6 +107,9 @@
                   placeholder="IT12345678901"
                   class="form-control"
                   formControlName="vatCode"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched('customer.vatCode')
+                  }"
                 />
 
                 <label for="pec" class="mt-3">PEC</label>
@@ -107,6 +119,9 @@
                   placeholder="info@pec.acmecorp.com"
                   class="form-control"
                   formControlName="pec"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched('customer.pec')
+                  }"
                 />
 
                 <label for="phone" class="mt-3">Phone</label>
@@ -116,6 +131,9 @@
                   placeholder="+39 0123 456789"
                   class="form-control"
                   formControlName="phone"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched('customer.phone')
+                  }"
                 />
 
                 <label for="contactPhone" class="mt-3">Contact Phone</label>
@@ -125,6 +143,9 @@
                   placeholder="+39 9876 543210"
                   class="form-control"
                   formControlName="contactPhone"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched('customer.contactPhone')
+                  }"
                 />
 
                 <label for="type" class="mt-3">Type</label>
@@ -144,6 +165,7 @@
               </button>
               <button
                 type="button"
+                [disabled]="invalidCustomerData()"
                 class="btn btn-primary mt-4"
                 (click)="nextStep()"
               >
@@ -162,6 +184,11 @@
                   placeholder="Main Street"
                   class="form-control"
                   formControlName="street"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.registeredOfficeAddress.street'
+                    )
+                  }"
                 />
 
                 <label for="registeredAddressNumber" class="mt-3"
@@ -173,6 +200,11 @@
                   placeholder="123"
                   class="form-control"
                   formControlName="addressNumber"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.registeredOfficeAddress.addressNumber'
+                    )
+                  }"
                 />
 
                 <label for="registeredCap" class="mt-3">ZIP Code</label>
@@ -182,6 +214,11 @@
                   placeholder="00100"
                   class="form-control"
                   formControlName="cap"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.registeredOfficeAddress.cap'
+                    )
+                  }"
                 />
 
                 <label for="registeredDistrict" class="mt-3">Province</label>
@@ -190,8 +227,13 @@
                   class="form-control"
                   formControlName="district"
                   (change)="onDistrictChange($event)"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.registeredOfficeAddress.district'
+                    )
+                  }"
                 >
-                  <option value="">Select Province</option>
+                  <option [value]="null">Select Province</option>
                   <option
                     *ngFor="let district of districts"
                     [value]="district.name"
@@ -208,6 +250,11 @@
                   id="registeredCity"
                   class="form-control"
                   formControlName="city"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.registeredOfficeAddress.city'
+                    )
+                  }"
                 >
                   <option [value]="null">Select a City</option>
                   <option *ngFor="let city of cities" [value]="city.name">
@@ -217,7 +264,7 @@
                 <div class="form-check mt-2">
                   <input
                     type="checkbox"
-                    (click)="onCheckboxChange()"
+                    (change)="onCheckboxChange()"
                     class="form-check-input"
                     id="exampleCheck1"
                     formControlName="isCheck"
@@ -236,6 +283,7 @@
               </button>
               <button
                 type="button"
+                [disabled]="invalidAddressData('registeredOfficeAddress')"
                 class="btn btn-primary mt-4"
                 (click)="nextStep()"
               >
@@ -257,6 +305,11 @@
                   placeholder="Second Avenue"
                   class="form-control"
                   formControlName="street"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.operationalHeadquartersAddress.street'
+                    )
+                  }"
                 />
 
                 <label for="operationalAddressNumber" class="mt-3"
@@ -268,6 +321,11 @@
                   placeholder="45B"
                   class="form-control"
                   formControlName="addressNumber"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.operationalHeadquartersAddress.addressNumber'
+                    )
+                  }"
                 />
 
                 <label for="operationalCap" class="mt-3">ZIP Code</label>
@@ -277,6 +335,11 @@
                   placeholder="20200"
                   class="form-control"
                   formControlName="cap"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.operationalHeadquartersAddress.cap'
+                    )
+                  }"
                 />
 
                 <label for="operationalDistrict" class="mt-3">Province</label>
@@ -285,11 +348,16 @@
                   class="form-control"
                   formControlName="district"
                   (change)="onDistrictChange1($event)"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.operationalHeadquartersAddress.district'
+                    )
+                  }"
                 >
-                  <option value="">Select Province</option>
+                  <option [ngValue]="null">Select Province</option>
                   <option
                     *ngFor="let district of districts"
-                    [value]="district.id"
+                    [ngValue]="district.name"
                   >
                     {{ district.name }}
                   </option>
@@ -303,6 +371,11 @@
                   id="operationalCity"
                   class="form-control"
                   formControlName="city"
+                  [ngClass]="{
+                    'border-danger': isInValidTouched(
+                      'customer.operationalHeadquartersAddress.city'
+                    )
+                  }"
                 >
                   <option [value]="null">Select a City</option>
                   <option *ngFor="let city of cities" [value]="city.name">
@@ -317,7 +390,11 @@
               >
                 Back
               </button>
-              <button type="submit" class="btn btn-primary mt-4">
+              <button
+                type="submit"
+                class="btn btn-primary mt-4"
+                [disabled]="!form.valid"
+              >
                 Register
               </button>
 
