@@ -37,10 +37,8 @@
             <span class="grey"> 📍Office :</span>
             <span class="">
               {{ customer.addresses.RegisteredOfficeAddress.street }}
-              {{ customer.addresses.RegisteredOfficeAddress.city.name }} (
-              {{
-                customer.addresses.RegisteredOfficeAddress.city.district.code
-              }}
+              {{ customer.addresses.RegisteredOfficeAddress.city }} (
+              {{ customer.addresses.RegisteredOfficeAddress.districtCode }}
               )
             </span>
           </li>
@@ -48,10 +46,9 @@
             <span class="grey"> 🏢 Headquarter:</span>
             <span class="">
               {{ customer.addresses.OperationalHeadquartersAddress.street }}
-              {{ customer.addresses.OperationalHeadquartersAddress.city.name }}
+              {{ customer.addresses.OperationalHeadquartersAddress.city }}
               {{
-                customer.addresses.OperationalHeadquartersAddress.city.district
-                  .code
+                customer.addresses.OperationalHeadquartersAddress.districtCode
               }}
             </span>
           </li>

@@ -1,3 +1,4 @@
+import { map, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -20,16 +21,16 @@ export class UserGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): MaybeAsync<GuardResult> {
-    this.authSvc.role$.subscribe((role) => {
-      if (role === 'USER') {
-        return true;
-      } else {
-        return false;
-      }
-    });
-
-    this.router.navigate(['/profile']);
-    return false;
+    return this.authSvc.role$.pipe(
+      map((role) => {
+        if (role === 'USER') {
+          return true;
+        } else {
+          this.router.navigate(['/profile']);
+          return false;
+        }
+      })
+    );
   }
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,

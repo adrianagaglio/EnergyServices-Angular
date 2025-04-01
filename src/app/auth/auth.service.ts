@@ -59,14 +59,14 @@ export class AuthService {
 
   resetPassword(passwordResetRequest: iPasswordResetRequest) {
     return this.http.patch<iResponseStringMessage>(
-      this.url + 'reset-password',
+      this.url + 'auth/reset-password',
       passwordResetRequest
     );
   }
 
   sendRequestPasswordReset(email: { email: string }) {
     return this.http.post<iResponseStringMessage>(
-      this.url + 'requestChangePassword',
+      this.url + 'auth/requestChangePassword',
       email
     );
   }

@@ -18,17 +18,11 @@ export class CitysrvService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getAllCities() {
+  getCitiesByDistrict(district: string) {
+    const url = `${this.cityUrl}/${district}`;
     return this.http
-      .get<iCityResponse[]>(this.cityUrl)
-      .pipe(
-        tap((cities: iCityResponse[] | null) => this.citySubject$.next(cities))
-      );
-  }
-
-  getCitiesByDistrictId(districtId: number) {
-    const url = `${this.cityUrl}/byDistrictId/${districtId}`;
-    return this.http.get<iCityResponse[]>(url);
+      .get<iCityResponse[]>(url)
+      .pipe(tap((cities) => this.citySubject$.next(cities)));
   }
 
   getAllDistricts() {
