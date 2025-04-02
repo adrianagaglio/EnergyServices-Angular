@@ -1,27 +1,38 @@
-# EnergyServices
+# Energy Service frontend (Demo)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.11.
+Progetto generato con [Angular CLI](https://github.com/angular/angular-cli) versione 18.2.0.
 
-## Development server
+## Descrizione 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Simulazione di web app per la gestione di clienti e fatture per società di energia. Offre un'interfaccia intuitiva sia per gli operatori interni che per i clienti finali e la consultazione di una dashboard.
 
-## Code scaffolding
+Permette:
+- operazioni CRUD
+- ricerca clienti con filtri
+- ricerca fatture con filtri
+- registrazione nuovi utenti e login
+- creazione nuove fatture
+- visualizzazione dashboard con report
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Tecnologie utilizzate:
+- Angular 18.2
+- Ng Bootstrap per web design e mobile responsive
+- State management con libreria RxJs
 
-## Build
+## Eseguire l'applicazione con Docker (consigliato)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Se non hai Docker installato, segui le istruzioni dal sito ufficiale: [Docker](https://docs.docker.com/desktop/)
+- Esegui `docker build . -t energyservice-fe-app` per creare l'immagine dell'applicazione con tutte le dipendenze necessarie al suo funzionamento
+- Esegui `docker -d --name energyservice-fe-container -p 4200:80 energyservice-fe-app:latest` per creare ed eseguire il container per avviare l'applicazione
+- Naviga `http://localhost:4200/`
 
-## Running unit tests
+## Eseguire l'applicazione sulla tua macchina locale (sconsigliato: richiede il download di tutti i pacchetti delle dipendenze)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Esegui `npm i` per scaricare le dipendenze.
+- Esegui `ng serve` per avviare il server di sviluppo.
+- Naviga `http://localhost:4200/`.
+- L'applicazione si aggiornarà automaticamente ad ogni modifica del file sorgente.
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Link al backend
+- [EnergyService Backend Web App](https://energyservices-java.onrender.com/swagger-ui/index.html) (documentazione endpoints)
+- [EnergyService Backend GitHub](https://github.com/adrianagaglio/EnergyServices-Java/)
