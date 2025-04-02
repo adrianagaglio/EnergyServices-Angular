@@ -1,9 +1,43 @@
-.app-card-customer{
+.app-card-customer {
   width: 100%;
 }
-.tab{
-  border: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.186);
-  color: black;
 
+.tab {
+  border: 0;
+  color: black;
+  padding: 0.5rem 0.7rem;
+}
+
+.tab:first-of-type {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.tab:last-of-type {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-group {
+  display: inline;
+}
+
+@media screen and (min-width: 768px) {
+  .tab {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.186);
+  }
+
+  .tab:first-of-type {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .tab:last-of-type {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  .btn-group {
+    display: inline-flex;
+  }
 }

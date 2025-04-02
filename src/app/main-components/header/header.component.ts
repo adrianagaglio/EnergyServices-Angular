@@ -32,6 +32,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.authSvc.logout();
   }
+
   toggleActive() {
     this.isActive = !this.isActive;
   }
