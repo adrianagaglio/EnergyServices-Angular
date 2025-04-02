@@ -27,6 +27,7 @@
           [routerLinkActiveOptions]="{ exact: true }"
           class="nav-link text-secondary"
           aria-current="page"
+          (click)="toggleActive()"
           >Home</a
         >
       </li>
@@ -35,6 +36,7 @@
           routerLink="/customers"
           routerLinkActive="active"
           class="nav-link text-secondary"
+          (click)="toggleActive()"
           >Customers</a
         >
       </li>
@@ -43,6 +45,7 @@
           routerLink="/invoices"
           routerLinkActive="active"
           class="nav-link text-secondary"
+          (click)="toggleActive()"
           >Invoices</a
         >
       </li>
@@ -54,6 +57,7 @@
           routerLink="/create-invoice"
           routerLinkActive="active"
           class="nav-link text-secondary"
+          (click)="toggleActive()"
           >Create Invoice</a
         >
       </li>
@@ -63,6 +67,7 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           class="nav-link text-secondary"
+          (click)="toggleActive()"
           >Register Employee</a
         >
       </li>
@@ -72,11 +77,16 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           class="nav-link text-secondary"
+          (click)="toggleActive()"
           >Login</a
         >
       </li>
       <li class="nav-item" *ngIf="role">
-        <a role="button" (click)="logout()" class="nav-link text-secondary"
+        <a
+          role="button"
+          (click)="logout()"
+          class="nav-link text-secondary"
+          (click)="toggleActive()"
           >Logout</a
         >
       </li>
